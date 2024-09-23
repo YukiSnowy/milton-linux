@@ -40,7 +40,7 @@ else()
   message(FATAL_ERROR "Unknown build type: ${CMAKE_BUILD_TYPE}. Supported build types: Release, Debug.")
 endif()
 
-set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_DEBUG "-O3")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 message(STATUS "Building ${CMAKE_BUILD_TYPE}")
@@ -74,6 +74,7 @@ endif()
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 
   find_package(OpenGL REQUIRED)
+  find_package(SDL2 REQUIRED)
   find_package(GTK2 2.6 REQUIRED gtk)
   find_package(X11 REQUIRED)
   find_library(XINPUT_LIBRARY libXi.so)
@@ -98,17 +99,15 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
   target_include_directories(Milton PRIVATE
     ${GTK2_INCLUDE_DIRS}
     ${X11_INCLUDE_DIR}
-    ${SDL2DIR}/build/linux64/include/SDL2
     ${OPENGL_INCLUDE_DIR}
   )
 
   target_link_libraries(Milton
+    -lSDL2main -lSDL2
     ${GTK2_LIBRARIES}
     ${X11_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${XINPUT_LIBRARY}
-    ${SDL2DIR}/build/linux64/lib/libSDL2maind.a
-    ${SDL2DIR}/build/linux64/lib/libSDL2d.a
     ${CMAKE_THREAD_LIBS_INIT}
     ${CMAKE_DL_LIBS}
     )
